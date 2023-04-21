@@ -68,7 +68,7 @@
 			<div class="col-sm-5">
 				<div>
                 </br></br></br>
-                <h4 style="color: #0d5317;">Model Predicted skin cancer type is</br></h4>
+                <h6 style="color: #0d5317;">Model Predicted skin cancer type is</br></h6>
 					<div class="d-flex justify-content-left align-items-left">					
 					<p class="text-lg fs-1" style="color: #12691f;"><strong>{{ ss }}</strong></br></p>
 					</div>
@@ -100,11 +100,35 @@
 			</div>
           
 			<div class="col-sm-6" style="background-color: rgb(255, 255, 255);">
-                <div  style=" margin-left: 200px;  background-color: rgb(160, 255, 208); width: 65%; height: 20px;"></div>
-            </br>   </br>
-				<img class="logo" src="\static\result.jpeg" style="width: 650px; height: 230px;">
-			</div>
-			<div class="col-sm-1"></div>
+
+				<div class="row" style="background-color: rgb(255, 255, 255);">
+					<div  style=" background-color: rgb(160, 255, 208); width: 100%; height: 20px;"></div>
+				</br></br>
+				<!-- <div class="col-sm-1"></div> -->
+				<div class="col-sm-4">
+					<label for="model" style="margin-left: 80px;  color: #12691f; font-weight: bold;">IMAGE </label>
+				</div>
+				<div class="col-sm-4">
+					<label for="model" style="margin-left: 40px;color: #12691f; font-weight: bold;">Grad CAM++</label>
+				</div>
+				<div class="col-sm-4">
+					<label for="model" style="margin-left: 20px; color: #12691f; font-weight: bold;">Grad CAM</label>
+				</div>
+		
+				</div>
+
+
+				<div class="row">
+					<div  style=" margin-left: 200px;  width: 65%; height: 20px;"></div>
+				</br>   </br>
+					<img class="logo" src="{{image}}" style="width: 240px; height: 200px;">
+					<img class="logo" src="\static\Grad_cam++.jpg" style="width: 240px; height: 200px;">
+					<img class="logo" src="\static\Grad_cam.jpg" style="width: 240px; height: 200px;">
+				</div>
+				<div class="col-sm-1"></div>
+
+				</div>
+               
 		</div>
 
 

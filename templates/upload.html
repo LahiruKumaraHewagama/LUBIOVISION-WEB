@@ -14,7 +14,10 @@
 	<title>LUBioVision</title>
 	<meta charset=utf-8 />
 
-	<script src="{{ url_for('static', filename='upload.js') }}"></script>
+	<script src="{{ url_for('static', filename='upload.js') }}">
+
+
+	</script>
 
 	<style>
 		article,
@@ -29,6 +32,30 @@
 			display: block;
 		}
 	</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #048e29;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
 </head>
 
 <body>
@@ -81,32 +108,52 @@
 
 				<div class="mt-3">
 
+					<form action="http://127.0.0.1:5000/result" method="POST"  enctype="multipart/form-data">
 
+						{% if buttonClicked %} 
 
-					<form action="http://127.0.0.1:5000/result" method="POST" enctype="multipart/form-data">
-
-						<div class="mb-3">
-							<label for="formFile" class="form-label">Select your skin image</label>
+						<div class="mb-2">
+							<label for="formFile" class="form-label" style="color: #12691f; font-weight: bold;">Select your skin image</label>
 							<input class="form-control" type='file' name='file' id="formFile" onchange="readURL(this);">
+						</br>
 						</div>
 
 						<!-- <input type='file' name='file' onchange="readURL(this);" /> -->
 						<!-- <img id="blah" src="#" alt="your image" /> -->
 						<!-- <button type="submit">Predict</button> -->
-						</br>
+
+						<label for="model" style="color: #12691f; font-weight: bold;">Choose a Machine Learning Model </label>
+						<select name="model" id="model" style="color: #3a3939; border-radius:5px; height: 38px; width: 375px;">
+						<option value="default">Select a Model</option>
+						<option value="xception" style="color: #12691f; font-weight: bold">Xception</option>
+						<option value="vgg" style="color: #12691f; font-weight: bold">VGG-16</option>
+						<option value="resnet" style="color: #12691f; font-weight: bold">ResNet-50</option>
+						<option value="basevit" style="color: #12691f; font-weight: bold">Base-VIT</option>
+						<option value="smvit" style="color: #12691f; font-weight: bold">SM-VIT</option>
+						</select>
+
+						</br></br></br>
 						<div class="d-flex justify-content-left align-items-left">
-							<button type="submit" class="btn btn-outline-success" style="width: 160px; height: 40px;">
+							<button type="submit" id="checkButton" onclick="changeContent(this)" class="btn btn-outline-success" style="width: 160px; height: 40px;">
 								<p class="fs-6">
 									Predict
 								</p>
 							</button>
+						</br>
+
+						{% else %} 
+							<div class="loader"></div>
+						
+						{% endif %} 
+					    
 						</div>
-
 					</form>
+				</br>
+				<div id="loading" style="color: #12691f; font-weight: bold"></div>
 
-
+					
 					</br></br>
-					<div class="col-sm-4" style="background-color: rgb(160, 255, 208); width: 450px; height: 100px;">
+					<div class="col-sm-4" style="background-color: rgb(160, 255, 208); width: 700px; height: 100px;">
 					</div>
 
 				</div>
@@ -123,6 +170,25 @@
 
 	</div>
 
+	<script>
+
+	// var buttonClicked = true;
+	// window.addEventListener('load',function(){
+	// console.log(buttonClicked);
+	// document.getElementById('checkButton').addEventListener('click',function(){
+	// 	buttonClicked = false;
+	// 	console.log(buttonClicked);
+	// });
+	// });
+
+
+	function changeContent(element) {
+		buttonClicked = false;
+    document.getElementById("loading").innerHTML = "Loading ... ";
+	}
+
+
+	</script>
 
 </body>
 
