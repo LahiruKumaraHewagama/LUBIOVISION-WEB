@@ -7,55 +7,16 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import tensorflow as tf
 import numpy as np
 import os
-
-try:
-	import shutil
-	# % cd uploaded % mkdir image % cd ..
-	print()
-except:
-	pass
-
-model = tf.keras.models.load_model('models\\VGG19.h5')
-app = Flask(__name__)
-
-app.config['UPLOAD_FOLDER'] = 'static\\uploaded'
-
-@app.route('/',methods = ['GET'])
-def home():
-	return render_template('index.html')
-
-@app.route('/generate',methods = ['GET', 'POST'])
-def upload_f():
-	if request.method == 'POST':
-		with os.scandir(app.config['UPLOAD_FOLDER']) as entries:
-			for entry in entries:
-				if entry.is_dir() and not entry.is_symlink():
-					shutil.rmtree(entry.path)
-				else:
-					os.remove(entry.path)
-	return render_template('upload.html',buttonClicked=True)
-
-def finds():
-	test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
-	vals = ['Melanoma', 'Nevus'] # change this according to what you've trained your model to do
-	test_dir = 'static'
-	test_generator = test_datagen.flow_from_directory(
-			test_dir,
-			shuffle=False,
-			batch_size = 1)
-
-	pred = model.predict_generator(test_generator)
-	
-	print(pred)
-	return str(vals[np.argmax(pred)])
-
-def heatmap(path):
-	import argparse
-	import cv2
-	import numpy as np
-	import torch
-	from torchvision import models
-	from pytorch_grad_cam import GradCAM, \
+from uuid import uuid4
+from datetime import date
+import cv2
+import numpy as np
+import torch
+from vit_pytorch import ViT
+import torch
+from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+from pytorch_grad_cam.utils.image import show_cam_on_image,preprocess_image
+from pytorch_grad_cam import GradCAM, \
 		HiResCAM, \
 		ScoreCAM, \
 		GradCAMPlusPlus, \
@@ -68,6 +29,134 @@ def heatmap(path):
 		GradCAMElementWise
 
 
+
+
+try:
+	import shutil
+	# % cd uploaded % mkdir image % cd ..
+	print()
+except:
+	pass
+
+model = tf.keras.models.load_model('models\\Xception.h5')
+vit_model = torch.load('models\SMVIT.pt',map_location=torch.device('cpu'))
+app = Flask(__name__)
+
+app.config['UPLOAD_FOLDER'] = 'static\\uploaded'
+
+@app.route('/',methods = ['GET'])
+def home():
+	# return render_template('edit.html')
+	return render_template('index.html')
+
+
+@app.route('/generate',methods = ['GET', 'POST'])
+def generate():
+	if request.method == 'POST':
+
+		try:
+			url=request.form.get('url')
+			os.remove(url)
+			os.remove(url.split('.')[0]+'_gradcam++.jpg')
+			os.remove(url.split('.')[0]+'_gradcam.jpg')
+		except:
+			pass
+
+	return render_template('upload.html',buttonClicked=True)
+
+@app.route('/usermanual',methods = ['GET', 'POST'])
+def usermanual():
+	if request.method == 'POST':
+		pass
+	return render_template('usermanual.html')
+
+@app.route('/aboutus',methods = ['GET', 'POST'])
+def aboutus():
+	if request.method == 'POST':
+		pass
+	return render_template('aboutus.html')
+
+def finds(path,model_type):
+
+	skin_class = ['Melanoma', 'Non-Melanoma'] # change this according to what you've trained your model to do
+	if(model_type=='cnn'):
+		test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
+				
+		#load the image
+		inputs_image = load_img(path, target_size=(224, 224))
+
+		#preprocess the image
+		inputs_image = img_to_array(inputs_image)
+		inputs_image = inputs_image.reshape((1, inputs_image.shape[0], inputs_image.shape[1], inputs_image.shape[2]))
+		inputs_image = preprocess_input(inputs_image)
+
+		#make the prediction
+		pred = model.predict(inputs_image)
+		acc=pred[0][np.argmax(pred)]/sum(pred[0])		
+		return str(skin_class[np.argmax(pred)]),str(round(acc*100,3))+'%'
+
+	else:
+		def reshape_transform(tensor, height=14, width=14):
+			result = tensor[:, 1:, :].reshape(tensor.size(0),
+											height, width, tensor.size(2))
+
+			# Bring the channels to the first dimension,
+			# like in CNNs.
+			result = result.transpose(2, 3).transpose(1, 2)
+			return result
+
+		# target_layers = [vit_model.transformer.encoder.layer[0].attention_norm]
+		# target_layers = [vit_model.transformer.encoder.layer[1].attention_norm]
+		target_layers = [vit_model.transformer.encoder.layer[-1].attention_norm]
+
+
+		url=path
+		rgb_img = cv2.imread(url, 1)[:, :, ::-1]
+		rgb_img = cv2.resize(rgb_img, (224, 224))
+		rgb_img = np.float32(rgb_img) / 255
+		input_tensor = preprocess_image(rgb_img, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+
+		methods = {"gradcam": GradCAM,
+         "scorecam": ScoreCAM,
+         "gradcam++": GradCAMPlusPlus }
+
+
+		# method='gradcam'
+		method='gradcam'
+
+		cam = methods[method](model=vit_model,target_layers=target_layers,use_cuda=False,reshape_transform=reshape_transform)
+
+		# If None, returns the map for the highest scoring category.
+		# Otherwise, targets the requested category.
+		targets = None
+
+		# input_tensor = input_tensor.cuda()
+		# AblationCAM and ScoreCAM have batched implementations.
+		# You can override the internal batch size for faster computation.
+		cam.batch_size = 32
+
+		outputs = cam.activations_and_grads(input_tensor)[0]
+		print(outputs)
+
+		if targets is None:
+			target_categories = np.argmax(outputs.cpu().data.numpy(), axis=-1)
+			print(target_categories)
+			targets = [ClassifierOutputTarget(category) for category in target_categories]
+
+		pred = outputs.cpu().data.numpy()
+		print(pred)
+		acc=pred[0][target_categories[0]]/(abs(pred[0][0])+abs(pred[0][1]))
+
+		return skin_class[target_categories[0]],str(round(acc*100,4))+'%'
+	
+
+def heatmap(path,model_type,name):
+	import argparse
+	import cv2
+	import numpy as np
+	import torch
+	from torchvision import models
+	
 	from pytorch_grad_cam import GuidedBackpropReLUModel
 	from pytorch_grad_cam.utils.image import show_cam_on_image, \
 		deprocess_image, \
@@ -88,119 +177,217 @@ def heatmap(path):
 		"fullgrad": FullGrad,
 		"gradcamelementwise": GradCAMElementWise}
 
-	model = models.resnet50(pretrained=True)
-	# import tensorflow as tf
-	# model= tf.keras.models.load_model(r'D:\CSE\6,7, 8 SEMESTERS\FYP\IMPLEMENT - NEW\CNN + Segmentation\new implementaion cnn\\Xception.h5')
+	print(model_type)
 
-	# Choose the target layer you want to compute the visualization for.
-	# Usually this will be the last convolutional layer in the model.
-	# Some common choices can be:
-	# Resnet18 and 50: model.layer4
-	# VGG, densenet161: model.features[-1]
-	# mnasnet1_0: model.layers[-1]
-	# You can print the model to help chose the layer
-	# You can pass a list with several target layers,
-	# in that case the CAMs will be computed per layer and then aggregated.
-	# You can also try selecting all layers of a certain type, with e.g:
-	# from pytorch_grad_cam.utils.find_layers import find_layer_types_recursive
-	# find_layer_types_recursive(model, [torch.nn.ReLU])
+	if(model_type=='cnn'):
+		model = models.resnet50(pretrained=True)
 
-	target_layers = [model.layer4]
-	# target_layers = model.layers[-5].name
+		target_layers = [model.layer4]
+		# target_layers = model.layers[-5].name
 
-	rgb_img = cv2.imread(path, 1)[:, :, ::-1]
-	rgb_img = np.float32(rgb_img) / 255
-	input_tensor = preprocess_image(rgb_img,mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
+		rgb_img = cv2.imread(path, 1)[:, :, ::-1]
+		rgb_img = np.float32(rgb_img) / 255
+		input_tensor = preprocess_image(rgb_img,mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
 
-	# We have to specify the target we want to generate
-	# the Class Activation Maps for.
-	# If targets is None, the highest scoring category (for every member in the batch) will be used.
-	# You can target specific categories by
-	# targets = [e.g ClassifierOutputTarget(281)]
-	targets = None
+		# We have to specify the target we want to generate
+		# the Class Activation Maps for.
+		# If targets is None, the highest scoring category (for every member in the batch) will be used.
+		# You can target specific categories by
+		# targets = [e.g ClassifierOutputTarget(281)]
+		targets = None
 
-	# Using the with statement ensures the context is freed, and you can
-	# recreate different CAM objects in a loop.
-	cam_algorithm = methods["gradcam++"]
-	with cam_algorithm(model=model,
-					target_layers=target_layers,
-					use_cuda=False) as cam:
+		# Using the with statement ensures the context is freed, and you can
+		# recreate different CAM objects in a loop.
+		cam_algorithm = methods["gradcam++"]
+		method="gradcam++"
+		with cam_algorithm(model=model,
+						target_layers=target_layers,
+						use_cuda=False) as cam:
 
+			# AblationCAM and ScoreCAM have batched implementations.
+			# You can override the internal batch size for faster computation.
+			cam.batch_size = 32
+			grayscale_cam = cam(input_tensor=input_tensor,
+								targets=targets)
+
+			# Here grayscale_cam has only one image in the batch
+			grayscale_cam = grayscale_cam[0, :]
+
+			cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
+
+			# cam_image is RGB encoded whereas "cv2.imwrite" requires BGR encoding.
+			cam_image = cv2.cvtColor(cam_image, cv2.COLOR_RGB2BGR)
+
+		gb_model = GuidedBackpropReLUModel(model=model, use_cuda=False)
+		gb = gb_model(input_tensor, target_category=None)
+
+		cam_mask = cv2.merge([grayscale_cam, grayscale_cam, grayscale_cam])
+		cam_gb = deprocess_image(cam_mask * gb)
+		gb = deprocess_image(gb)
+
+		# cv2.imwrite('static\Grad_cam++.jpg', cam_image)
+		# name=path.split('.')[0].split('/')[-1]
+		cv2.imwrite(f'static\\uploaded\\'+name+"_"+method+'.jpg', cam_image)		
+
+
+
+		# Grad cam 
+		cam_algorithm = methods["gradcam"]
+		method="gradcam"
+		with cam_algorithm(model=model,
+						target_layers=target_layers,
+						use_cuda=False) as cam:
+
+			# AblationCAM and ScoreCAM have batched implementations.
+			# You can override the internal batch size for faster computation.
+			cam.batch_size = 32
+			grayscale_cam = cam(input_tensor=input_tensor,
+								targets=targets)
+
+			# Here grayscale_cam has only one image in the batch
+			grayscale_cam = grayscale_cam[0, :]
+
+			cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
+
+			# cam_image is RGB encoded whereas "cv2.imwrite" requires BGR encoding.
+			cam_image = cv2.cvtColor(cam_image, cv2.COLOR_RGB2BGR)
+
+		gb_model = GuidedBackpropReLUModel(model=model, use_cuda=False)
+		gb = gb_model(input_tensor, target_category=None)
+
+		cam_mask = cv2.merge([grayscale_cam, grayscale_cam, grayscale_cam])
+		cam_gb = deprocess_image(cam_mask * gb)
+		gb = deprocess_image(gb)
+
+		# cv2.imwrite('static\Grad_cam.jpg', cam_image)
+		# name=path.split('.')[0].split('/')[-1]
+		cv2.imwrite(f'static\\uploaded\\'+name+"_"+method+'.jpg', cam_image)		
+		# cv2.imwrite('B_gb.jpg', gb)
+		# cv2.imwrite('C_cam_gb.jpg', cam_gb)
+
+	else:
+
+		def reshape_transform(tensor, height=14, width=14):
+			result = tensor[:, 1:, :].reshape(tensor.size(0),
+											height, width, tensor.size(2))
+
+			# Bring the channels to the first dimension,
+			# like in CNNs.
+			result = result.transpose(2, 3).transpose(1, 2)
+			return result
+
+
+		methods = {"gradcam": GradCAM,
+				"scorecam": ScoreCAM,
+				"gradcam++": GradCAMPlusPlus }
+
+
+		# target_layers = [vit_model.transformer.encoder.layer[0].attention_norm]
+		target_layers = [vit_model.transformer.encoder.layer[1].attention_norm]
+		# target_layers = [vit_model.transformer.encoder.layer[-1].attention_norm]
+
+		# method='gradcam'
+		method='gradcam'
+
+		cam = methods[method](model=vit_model,target_layers=target_layers,use_cuda=False,reshape_transform=reshape_transform)
+
+		url=path
+		rgb_img = cv2.imread(url, 1)[:, :, ::-1]
+		rgb_img = cv2.resize(rgb_img, (224, 224))
+		rgb_img = np.float32(rgb_img) / 255
+		input_tensor = preprocess_image(rgb_img, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+
+		# If None, returns the map for the highest scoring category.
+		# Otherwise, targets the requested category.
+		targets = None
+		# input_tensor = input_tensor.cuda()
 		# AblationCAM and ScoreCAM have batched implementations.
 		# You can override the internal batch size for faster computation.
 		cam.batch_size = 32
-		grayscale_cam = cam(input_tensor=input_tensor,
-							targets=targets)
+
+		outputs = cam.activations_and_grads(input_tensor)[0]
+		if targets is None:
+			target_categories = np.argmax(outputs.cpu().data.numpy(), axis=-1)
+		
+			targets = [ClassifierOutputTarget(category) for category in target_categories]
+
+		grayscale_cam = cam(input_tensor=input_tensor,aug_smooth =False,targets=targets)
 
 		# Here grayscale_cam has only one image in the batch
 		grayscale_cam = grayscale_cam[0, :]
 
-		cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
+		cam_image = show_cam_on_image(rgb_img, grayscale_cam)
 
-		# cam_image is RGB encoded whereas "cv2.imwrite" requires BGR encoding.
-		cam_image = cv2.cvtColor(cam_image, cv2.COLOR_RGB2BGR)
+		# name=url.split('.')[0].split('/')[-1]
+		cv2.imwrite(f'static\\uploaded\\'+name+"_"+method+'.jpg', cam_image)		
 
-	gb_model = GuidedBackpropReLUModel(model=model, use_cuda=False)
-	gb = gb_model(input_tensor, target_category=None)
 
-	cam_mask = cv2.merge([grayscale_cam, grayscale_cam, grayscale_cam])
-	cam_gb = deprocess_image(cam_mask * gb)
-	gb = deprocess_image(gb)
 
-	cv2.imwrite('static\Grad_cam++.jpg', cam_image)
-	# Grad cam 
-	cam_algorithm = methods["gradcam"]
-	with cam_algorithm(model=model,
-					target_layers=target_layers,
-					use_cuda=False) as cam:
+		# method='gradcam'
+		method='gradcam++'
 
-		# AblationCAM and ScoreCAM have batched implementations.
+		cam = methods[method](model=vit_model,target_layers=target_layers,use_cuda=False,reshape_transform=reshape_transform)
+
+		url=path
+		rgb_img = cv2.imread(url, 1)[:, :, ::-1]
+		rgb_img = cv2.resize(rgb_img, (224, 224))
+		rgb_img = np.float32(rgb_img) / 255
+		input_tensor = preprocess_image(rgb_img, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+
+		# If None, returns the map for the highest scoring category.
+		# Otherwise, targets the requested category.
+		targets = None
+		# input_tensor = input_tensor.cuda()
 		# You can override the internal batch size for faster computation.
 		cam.batch_size = 32
-		grayscale_cam = cam(input_tensor=input_tensor,
-							targets=targets)
+
+		outputs = cam.activations_and_grads(input_tensor)[0]
+		if targets is None:
+			target_categories = np.argmax(outputs.cpu().data.numpy(), axis=-1)
+		
+			targets = [ClassifierOutputTarget(category) for category in target_categories]
+
+		grayscale_cam = cam(input_tensor=input_tensor,aug_smooth =False,targets=targets)
 
 		# Here grayscale_cam has only one image in the batch
 		grayscale_cam = grayscale_cam[0, :]
 
-		cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
+		cam_image = show_cam_on_image(rgb_img, grayscale_cam)
 
-		# cam_image is RGB encoded whereas "cv2.imwrite" requires BGR encoding.
-		cam_image = cv2.cvtColor(cam_image, cv2.COLOR_RGB2BGR)
+		# name=url.split('.')[0].split('/')[-1]
+		cv2.imwrite(f'static\\uploaded\\'+name+"_"+method+'.jpg', cam_image)		
+		# cv2.imwrite('static\\'+name+'_Grad_cam++.jpg', cam_image)
 
-	gb_model = GuidedBackpropReLUModel(model=model, use_cuda=False)
-	gb = gb_model(input_tensor, target_category=None)
+	return
 
-	cam_mask = cv2.merge([grayscale_cam, grayscale_cam, grayscale_cam])
-	cam_gb = deprocess_image(cam_mask * gb)
-	gb = deprocess_image(gb)
-
-	cv2.imwrite('static\Grad_cam.jpg', cam_image)
-	# cv2.imwrite('B_gb.jpg', gb)
-	# cv2.imwrite('C_cam_gb.jpg', cam_gb)
-
-	return 
 
 @app.route('/result', methods = ['GET', 'POST'])
 def upload_file():
 
 	if request.method == 'POST':
-		
+	
+		# print(request.form.get('model'))
+		model_type=request.form.get('model')
 		f = request.files['file']
 		f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
-		val = finds()
+		name=f.filename.split('.')[0]
 
 		pathf1= os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename))
+
+		val,acc = finds(pathf1,model_type)
+		val,acc ="Melanoma",'45.66%'
 		img = np.array(load_img(pathf1,target_size=(224,224,3)),dtype=np.float64)
 
-		heatmap(pathf1)
+		heatmap(pathf1,model_type,name)
 		# grad_cam=_compare_an_image(model,img,model.layers[-5].name)
 		# f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
-
-		return render_template('pred.html', ss = val,image=pathf1)
+		id=str(uuid4())
+		return render_template('pred.html', ss = val,image=pathf1,accuracy=acc,name=name,id=id,date=str(date.today()))
 
 if __name__ == '__main__':
 	from dotenv import load_dotenv
 	dotenv_path = '.env' # Path to .env file
 	load_dotenv(dotenv_path)
 	app.run(debug=True)
+	app.run(use_reloader=True)
+
