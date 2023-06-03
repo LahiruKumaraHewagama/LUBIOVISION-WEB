@@ -4,15 +4,15 @@
   <head>
     <meta charset="utf-8">
     <title>Image Editor in JavaScript | CodingNepal</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
+    <!-- <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/> -->
 
 
 	<style>
 /* Import Google font - Poppins */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+/* 
 *{
   margin: 0;
   padding: 0;
@@ -162,7 +162,7 @@ body{
   margin-left: 5px;
   background: #5372F0;
   border: 1px solid #5372F0;
-}
+} */
 
 @media screen and (max-width: 760px) {
   .container{
@@ -227,6 +227,8 @@ img {
   border: 2px dashed red;
   pointer-events: none;
 }
+
+
 	</style>
 
 
@@ -252,13 +254,8 @@ img {
                             <p class="value">100%</p>
                         </div>
                         <input type="range" value="100" min="0" max="200">
-                    </div>
-                </div>
-                <div class="crop">
-                  <label class="title">Crop</label>
-                  <button id="crop" class="active"><i class="fa-solid fa-crop"></i></button>
-                  <button class="crop-btn">Crop</button>
-                  <button class="clear-crop-btn">Clear Crop</button>
+
+                    </div>           
                 </div>
                 <div class="rotate">
                     <label class="title">Rotate & Flip</label>
@@ -284,7 +281,6 @@ img {
         </div>
     </div>
 
-    <!-- <script src="static\edit.js"></script> -->
     <script src="{{ url_for('static', filename='edit.js') }}"></script>
   </body>
 </html>

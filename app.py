@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from werkzeug.utils  import secure_filename
 from keras.preprocessing.image import ImageDataGenerator
-from explanation import _compare_an_image
+# from explanation import _compare_an_image
 from tensorflow.keras.applications.xception import preprocess_input
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import tensorflow as tf
@@ -29,8 +29,6 @@ from pytorch_grad_cam import GradCAM, \
 		GradCAMElementWise
 
 
-
-
 try:
 	import shutil
 	# % cd uploaded % mkdir image % cd ..
@@ -49,6 +47,39 @@ def home():
 	# return render_template('edit.html')
 	return render_template('index.html')
 
+@app.route('/pdf',methods = ['POST'])
+def pdf():
+	# return render_template('edit.html')
+
+# document.getElementById("patientName").value =document.getElementById("contact-name").value;
+# 			document.getElementById("uuid").value =id;
+# 			document.getElementById("date").value =date;
+
+
+# 			document.getElementById("val").value =ss;
+# 			document.getElementById("acc").value =accuracy;
+# 			document.getElementById("approval").value =document.getElementById("Approve").checked;
+# 			document.getElementById("feedback").value =document.getElementById("contact-message").value;
+# 			document.getElementById("imgname").value =name;
+# 			document.getElementById("imgurl").value =image;
+	if request.method == 'POST':
+
+			try:
+				patientName=request.form.get('patientName')
+				uuid=request.form.get('uuid')
+				dates=request.form.get('date')
+				val=request.form.get('val')
+				acc=request.form.get('acc')
+				approval=request.form.get('approval')
+				feedback=request.form.get('feedback')
+				imgname=request.form.get('imgname')			
+				imgurl=request.form.get('imgurl')
+
+			except:
+				pass
+
+
+	return render_template('pdf.html',patientName=patientName,uuid=uuid,date=dates,accuracy=acc,val=val,approval=approval,feedback=feedback,imgname=imgname,imgurl=imgurl)
 
 @app.route('/generate',methods = ['GET', 'POST'])
 def generate():
@@ -76,6 +107,45 @@ def aboutus():
 		pass
 	return render_template('aboutus.html')
 
+def accurygetting(mel_score,nv_score):
+	
+	mel_fac = 0
+	nv_fac = 0
+
+	if nv_score == mel_score:
+		nv_fac = abs(nv_score)
+		mel_fac = abs(mel_score)
+	elif mel_score > 0 and nv_score > 0:
+		if mel_score > nv_score:
+			mel_fac = abs(mel_score)+abs(nv_score)
+			nv_fac = abs(nv_score)
+		else:
+			nv_fac = abs(mel_score)+abs(nv_score)
+			mel_fac = abs(mel_score)
+	elif mel_score < 0 and nv_score < 0:
+		if mel_score > nv_score:
+			mel_fac = abs(mel_score)+abs(nv_score)
+			nv_fac = abs(nv_score)
+		else:
+			nv_fac = abs(mel_score)+abs(nv_score)
+			mel_fac = abs(mel_score)
+	elif mel_score > 0:
+		mel_fac = abs(mel_score)+abs(nv_score)
+		nv_fac = abs(nv_score)    
+	elif nv_score > 0:
+		nv_fac = abs(mel_score)+abs(nv_score)
+		mel_fac = abs(mel_score)
+	else:
+		nv_fac = abs(nv_score)
+		mel_fac = abs(mel_score)
+		
+	mel_prsent = (mel_fac * 100)/ (mel_fac + nv_fac)
+	nv_prsent = (nv_fac * 100)/ (mel_fac + nv_fac)
+
+	return max([mel_prsent,nv_prsent])
+
+
+
 def finds(path,model_type):
 
 	skin_class = ['Melanoma', 'Non-Melanoma'] # change this according to what you've trained your model to do
@@ -92,8 +162,9 @@ def finds(path,model_type):
 
 		#make the prediction
 		pred = model.predict(inputs_image)
-		acc=pred[0][np.argmax(pred)]/sum(pred[0])		
-		return str(skin_class[np.argmax(pred)]),str(round(acc*100,3))+'%'
+		# acc=pred[0][np.argmax(pred)]/sum(pred[0])	
+		acc=accurygetting(pred[0][0],pred[0][1])	
+		return str(skin_class[np.argmax(pred)]),str(round(acc,2))+'%'
 
 	else:
 		def reshape_transform(tensor, height=14, width=14):
@@ -144,10 +215,10 @@ def finds(path,model_type):
 			targets = [ClassifierOutputTarget(category) for category in target_categories]
 
 		pred = outputs.cpu().data.numpy()
-		print(pred)
-		acc=pred[0][target_categories[0]]/(abs(pred[0][0])+abs(pred[0][1]))
-
-		return skin_class[target_categories[0]],str(round(acc*100,4))+'%'
+		# print(pred)
+		# acc=pred[0][target_categories[0]]/(abs(pred[0][0])+abs(pred[0][1]))
+		acc=accurygetting(pred[0][0],pred[0][1])
+		return skin_class[target_categories[0]],str(round(acc,2))+'%'
 	
 
 def heatmap(path,model_type,name):
@@ -228,7 +299,6 @@ def heatmap(path,model_type,name):
 		# cv2.imwrite('static\Grad_cam++.jpg', cam_image)
 		# name=path.split('.')[0].split('/')[-1]
 		cv2.imwrite(f'static\\uploaded\\'+name+"_"+method+'.jpg', cam_image)		
-
 
 
 		# Grad cam 
@@ -375,7 +445,7 @@ def upload_file():
 		pathf1= os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename))
 
 		val,acc = finds(pathf1,model_type)
-		val,acc ="Melanoma",'45.66%'
+				
 		img = np.array(load_img(pathf1,target_size=(224,224,3)),dtype=np.float64)
 
 		heatmap(pathf1,model_type,name)
