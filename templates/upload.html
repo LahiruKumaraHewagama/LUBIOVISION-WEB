@@ -1,495 +1,408 @@
 <!DOCTYPE html>
-
 <html>
-
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-		crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-	<link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
-	<title>LUBioVision</title>
-	<meta charset=utf-8 />
-	<script src="jquery.js"></script>
-	<script src="{{ url_for('static', filename='upload.js') }}"></script>
-
-
-	<style>
-		article,
-		aside,
-		figure,
-		footer,
-		header,
-		hgroup,
-		menu,
-		nav,
-		section {
-			display: block;
-		}
-
-		.container.disable .editor-panel,
-		.container.disable .reset-filter,
-		.container.disable .save-img {
-			opacity: 0.5;
-			pointer-events: none;
-		}
-
-		.container .wrapper {
-			display: flex;
-			margin: 20px 0;
-			min-height: 335px;
-		}
-
-		.wrapper .editor-panel {
-			padding: 15px 20px;
-			width: 100%;
-			border-radius: 5px;
-			border: 1px solid #ccc;
-		}
-
-		.editor-panel .title {
-			display: block;
-			font-size: 16px;
-			margin-bottom: 12px;
-		}
-
-		.editor-panel .options,
-		.controls {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-		}
-
-		.editor-panel button {
-			outline: none;
-			height: 40px;
-			font-size: 14px;
-			color: #6C757D;
-			background: #fff;
-			border-radius: 3px;
-			margin-bottom: 8px;
-			border: 1px solid #aaa;
-		}
-
-		.editor-panel .filter button {
-			width: calc(100% / 2 - 4px);
-		}
-
-		.editor-panel button:hover {
-			background: #f5f5f5;
-		}
-
-		.filter button.active {
-			color: #fff;
-			border-color: #00815c;
-			background: #00815c;
-		}
-
-		.filter .slider {
-			margin-top: 12px;
-		}
-
-		.filter .slider .filter-info {
-			display: flex;
-			color: #464646;
-			font-size: 14px;
-			justify-content: space-between;
-		}
-
-		.filter .slider input {
-			width: 100%;
-			height: 5px;
-			accent-color: #00815c;
-		}
-
-		.editor-panel .rotate {
-			margin-top: 17px;
-		}
-
-		.editor-panel .rotate button {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			width: calc(100% / 4 - 3px);
-		}
-
-		.rotate .options button:nth-child(3),
-		.rotate .options button:nth-child(4) {
-			font-size: 18px;
-		}
-
-		.rotate .options button:active {
-			color: #fff;
-			background: #00815c;
-			border-color: #00815c;
-		}
-	</style>
-
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<style>
-		.loader {
-			border: 16px solid #f3f3f3;
-			border-radius: 50%;
-			border-top: 16px solid #00815c;
-			width: 120px;
-			height: 120px;
-			-webkit-animation: spin 2s linear infinite;
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+			integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+			crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+		<link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css">
+		<title>LUBioVision</title>
+		<meta charset=utf-8 />
+		<script src="jquery.js"></script>
+		<script src="{{ url_for('static', filename='upload.js') }}"></script>
+	
+	
+		<style>
+			article,
+			aside,
+			figure,
+			footer,
+			header,
+			hgroup,
+			menu,
+			nav,
+			section {
+				display: block;
+			}
+	
+			.container.disable .editor-panel,
+			.container.disable .reset-filter,
+			.container.disable .save-img {
+				opacity: 0.5;
+				pointer-events: none;
+			}
+	
+			.container .wrapper {
+				display: flex;
+				margin: 20px 0;
+				min-height: 335px;
+			}
+	
+			.wrapper .editor-panel {
+				padding: 15px 20px;
+				width: 100%;
+				border-radius: 5px;
+				border: 1px solid #ccc;
+			}
+	
+			.editor-panel .title {
+				display: block;
+				font-size: 16px;
+				margin-bottom: 12px;
+			}
+	
+			.editor-panel .options,
+			.controls {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+			}
+	
+			.editor-panel button {
+				outline: none;
+				height: 40px;
+				font-size: 14px;
+				color: #6C757D;
+				background: #fff;
+				border-radius: 3px;
+				margin-bottom: 8px;
+				border: 1px solid #aaa;
+			}
+	
+			.editor-panel .filter button {
+				width: calc(100% / 2 - 4px);
+			}
+	
+			.editor-panel button:hover {
+				background: #f5f5f5;
+			}
+	
+			.filter button.active {
+				color: #fff;
+				border-color: #00815c;
+				background: #00815c;
+			}
+	
+			.filter .slider {
+				margin-top: 12px;
+			}
+	
+			.filter .slider .filter-info {
+				display: flex;
+				color: #464646;
+				font-size: 14px;
+				justify-content: space-between;
+			}
+	
+			.filter .slider input {
+				width: 100%;
+				height: 5px;
+				accent-color: #00815c;
+			}
+	
+			.editor-panel .rotate {
+				margin-top: 17px;
+			}
+	
+			.editor-panel .rotate button {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: calc(100% / 4 - 3px);
+			}
+	
+			.rotate .options button:nth-child(3),
+			.rotate .options button:nth-child(4) {
+				font-size: 18px;
+			}
+	
+			.rotate .options button:active {
+				color: #fff;
+				background: #00815c;
+				border-color: #00815c;
+			}
+		</style>
+	
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+			.loader {
+				border: 16px solid #f3f3f3;
+				border-radius: 50%;
+				border-top: 16px solid #00815c;
+				width: 120px;
+				height: 120px;
+				-webkit-animation: spin 2s linear infinite;
+				/* Safari */
+				animation: spin 2s linear infinite;
+			}
+	
 			/* Safari */
-			animation: spin 2s linear infinite;
-		}
-
-		/* Safari */
-		@-webkit-keyframes spin {
-			0% {
-				-webkit-transform: rotate(0deg);
+			@-webkit-keyframes spin {
+				0% {
+					-webkit-transform: rotate(0deg);
+				}
+	
+				100% {
+					-webkit-transform: rotate(360deg);
+				}
 			}
-
-			100% {
-				-webkit-transform: rotate(360deg);
+	
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+	
+				100% {
+					transform: rotate(360deg);
+				}
 			}
-		}
-
-		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
+	
+			.wrapper .preview-img {
+				flex-grow: 1;
+				display: flex;
+				overflow: hidden;
+				margin-left: 20px;
+				border-radius: 5px;
+				align-items: center;
+				justify-content: center;
 			}
-
-			100% {
-				transform: rotate(360deg);
+	
+			.preview-img img {
+				max-width: 490px;
+				max-height: 335px;
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
 			}
-		}
-
-		.wrapper .preview-img {
-			flex-grow: 1;
-			display: flex;
-			overflow: hidden;
-			margin-left: 20px;
-			border-radius: 5px;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.preview-img img {
-			max-width: 490px;
-			max-height: 335px;
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
-		}
-
-		#image-container {
-			width: 300px;
-			height: 300px;
-			position: relative;
-			overflow: hidden;
-		}
-
-		#uploaded-image {
-			width: 100%;
-			height: auto;
-			transition: transform 0.3s;
-		}
-
-		.zoomed {
-			transform: scale(var(--scale-factor)) rotate(var(--rotation-angle));
-		}
-
-		.loader {
-			border: 16px solid #f3f3f3;
-			border-radius: 10%;
-			border-top: 16px solid #00815c;
-			width: 120px;
-			height: 120px;
-			-webkit-animation: bar 2s linear infinite;
+	
+			#image-container {
+				width: 300px;
+				height: 300px;
+				position: relative;
+				overflow: hidden;
+			}
+	
+			#uploaded-image {
+				width: 100%;
+				height: auto;
+				transition: transform 0.3s;
+			}
+	
+			.zoomed {
+				transform: scale(var(--scale-factor)) rotate(var(--rotation-angle));
+			}
+	
+			.loader {
+				border: 16px solid #f3f3f3;
+				border-radius: 10%;
+				border-top: 16px solid #00815c;
+				width: 120px;
+				height: 120px;
+				-webkit-animation: bar 2s linear infinite;
+				/* Safari */
+				animation: bar 2s linear infinite;
+			}
+	
 			/* Safari */
-			animation: bar 2s linear infinite;
-		}
-
-		/* Safari */
-		@-webkit-keyframes bar {
-			0% {
-				-webkit-transform: rotate(0deg);
+			@-webkit-keyframes bar {
+				0% {
+					-webkit-transform: rotate(0deg);
+				}
+	
+				100% {
+					-webkit-transform: rotate(360deg);
+				}
 			}
-
-			100% {
-				-webkit-transform: rotate(360deg);
+	
+			@keyframes bar {
+				0% {
+					transform: rotate(0deg);
+				}
+	
+				100% {
+					transform: rotate(360deg);
+				}
 			}
-		}
-
-		@keyframes bar {
-			0% {
-				transform: rotate(0deg);
+	
+			.loading-bar-container {
+				width: 400px;
+				height: 10px;
+				border-radius: 10px;
+				border: 1px solid #ccc;
 			}
-
-			100% {
-				transform: rotate(360deg);
+	
+			.loading-bar {
+				width: 0%;
+				height: 100%;
+				background-color: #007a53;
+				transition: width 0.1s ease-in-out;
 			}
-		}
-
-		.loading-bar-container {
-			width: 400px;
-			height: 10px;
-			border-radius: 10px;
-			border: 1px solid #ccc;
-		}
-
-		.loading-bar {
-			width: 0%;
-			height: 100%;
-			background-color: #007a53;
-			transition: width 0.1s ease-in-out;
-		}
-	</style>
-
-
-
-</head>
-
+		</style>
+	
+	
+	
+	</head>
 <body>
-	<div>
-		<div>
-			<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
-				<img class="logo" src="\static\logo.jpeg" style="margin-left: 110px;  width: 180px; height: 70px;">
-
-
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-					aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
-					style=" margin-left: 10px; border-radius: 0px; border-color: #ffffff;">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-
-
-				<div class="collapse navbar-collapse" style="margin-left: 48%;" id="navbarNav">
-					<ul class="navbar-nav">
-						<li class="nav-item active">
-							<a class="nav-link" href="/">Home</a>
-
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" style="color: #02c33c;" href="/generate"><strong>Generate</strong></a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/usermanual">User Manual</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="/aboutus">About Us</a>
-						</li>
-					</ul>
-				</div>
-			</nav>
-
-		</div>
-	</div>
-
-
-
-	<div class="mt-2">
-		<div class="row">
-			<div class="col-sm-1"></div>
-			<div class="col-sm-5">
-				<div>
-					<div class="justify-content-left align-items-left">
-						<p class="text-lg fs-1" style="color: #12691f;">
-
-							<strong>Accurate, Fast & Sensitive</strong></br>
-						</p>
-					</div>
-					<!-- <div class="text-left">
-						<p class="">Now you don't need to delaying to check your skin .This website help to detect
-							melanoma skin cancer image within few Seconds</p>
-						</br>
-					</div> -->
-				</div>
-
-				<div>
-
-
-					{% if buttonClicked %}
-
-					<!-- <div class="mb-2">
-							<label for="formFile" class="form-label" style="color: #12691f; font-weight: bold; font-size: x-large;">Select your skin image</label>
-							<input class="form-control" type='file' name='file' id="formFile" onchange="readURL(this);">
-						</br>
-						</div> -->
-
-
-					<!-- <div id="image-container">
-						<img src="" id="uploaded-image" alt="Uploaded Image">
-						</div>
-						<input type="range" min="1" max="4" value="1" step="0.1" id="zoomer" oninput="zoomImage()">
-						<button onclick="rotateImage()">Rotate</button>
-						<button onclick="saveImage()">Save Image</button>
-	 -->
-					<!-- <input type='file' name='file' onchange="readURL(this);" /> -->
-					<!-- <img id="blah" src="#" alt="your image" /> -->
-					<!-- <button type="submit">Predict</button> -->
-
-
-					<div class="container disable">
-						<h2>Image Editor</h2>
-						<p>Use this editer,only if you need to edit skin image before the uploading</p>
-
-
-						<input type="checkbox" id="toggleCheckbox"> Use Editor
-
-
-						<div id="editcontent" style="display: none;">
-							<div class="wrapper">
-								<div class="editor-panel">
-									<div class="filter">
-										<label class="title">Filters</label>
-										<div class="row">
-											<div class="col-sm-5">
-												<div class="options">
-													<button id="brightness" class="active">Brightness</button>
-													<button id="saturation">Saturation</button>
-													<button id="inversion">Inversion</button>
-													<button id="grayscale">Grayscale</button>
-												</div>
-												<div class="slider">
-													<div class="filter-info">
-														<p class="name">Brighteness</p>
-														<p class="value">100%</p>
-													</div>
-													<input type="range" value="100" min="0" max="200">
-
-												</div>
-
-												<div class="rotate">
-													<label class="title">Rotate & Flip</label>
-													<div class="options">
-														<button id="left"><i
-																class="fa-solid fa-rotate-left"></i></button>
-														<button id="right"><i
-																class="fa-solid fa-rotate-right"></i></button>
-														<button id="horizontal"><i
-																class='bx bx-reflect-vertical'></i></button>
-														<button id="vertical"><i
-																class='bx bx-reflect-horizontal'></i></button>
-													</div>
-												</div>
-											</div>
-											<div class="col-sm-7">
-												<div class="preview-img">
-													<img src="\static\image-placeholder.png" alt="preview-img">
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-							</div>
-							<div class="controls">
-
-								<div class="row">
-
-									<input type="file" class="file-input" accept="image/*" hidden>
-									<button class="choose-img"
-										style=" margin-left: 10px; border: #00815c solid 1px; width: auto; height:40px; color: #ffffff; background-color: #007a53; border-radius: 5px;">Choose
-										Image</button>
-									<button class="save-img"
-										style=" margin-left: 10px; border: #00815c solid 1px; width: auto; height:40px; color: #ffffff; background-color: #007a53; border-radius: 5px;">Save
-										Image</button>
-									<button class="reset-filter"
-										style="margin-left: 10px; border: #00815c solid 1px; width: auto; height:40px; color: #ffffff; background-color: #007a53; border-radius: 5px;">Reset
-										Filters</button>
-								</div>
-							</div>
-							</br>
-
-							</br>
-						</div>
-
-					</div>
-
-					</br>
-					<form action="http://127.0.0.1:5000/result" method="POST" enctype="multipart/form-data">
-						<div class="mb-2">
-							<h2>Select Edited skin
-								image</h2>
-							<!-- <label for="formFile" class="form-label"
-								style="color: #12691f; font-weight: bold; font-size: x-large;">Select your skin
-								image</label> -->
-							<div id="image-cropper1">
-								<input class="form-control" type='file'
-									style=" font-weight:bold; color: #fff;  border: #007a53 solid 2px; background-color: #007a53;"
-									name='file' id="formFile">
-								<p>Click below 'Predict' button after selecting input image</p>
-							</div>
-							</br>
-						</div>
-
-						<h2>Choose the AI Model</h2>
-
-
-						<div class="row">
-							<div class="col-sm-5">
-								<input type="radio" id="cnn" name="model" value="cnn" checked>
-								<label for="cnn">CNN Model (Xception)</label><br>
-							</div>
-							<div class="col-sm-5">
-								<input type="radio" id="vit" name="model" value="vit">
-								<label for="vit">VIT Model (SM-VIT)</label><br>
-							</div>
-						</div>
-
-						</br></br>
-						<div class="d-flex justify-content-left align-items-left">
-							<button type="submit" id="predict-btn" onclick="startLoading() "
-								class="btn btn-outline-success" style="width: 160px; height: 40px; display: block;">
-								<p class="fs-6">
-									Predict
-								</p>
-							</button>
-							</br>
-
-							<!-- <div class="loader" id="loader1" style="display: block"></div> -->
-							<div class="loading-bar-container" id="loader1" style="display: none">
-								<div class="loading-bar"></div>
-								<h6 id="loading" style="color: #12691f; ">Please wait,Prediction generating...</h6>
-
-							</div>
-
-							{% else %}
-
-							<!-- <div class="loader" id="loader1" style="display: none"></div> -->
-
-							{% endif %}
-
-						</div>
-
-
-					</form>
-
-
-
-
-
-					</br>
-					<div id="loading" style="color: #12691f; font-weight: bold"></div>
-
-
-
-
-				</div>
-			</div>
-			<div class="col-sm-1"></div>
-			<div class="col-sm-4" style="background-color: rgb(255, 255, 255);">
-				<img class="logo" src="\static\bg1.png" style="width: 450px; height: 530px;">
-			</div>
-			<div class="col-sm-1"></div>
-		</div>
-
-
-	</div>
-
-	</div>
-
+    <div>
+        <div>
+            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
+                <img class="logo" src="\static\logo.jpeg" style="margin-left: 110px; width: 180px; height: 70px;">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
+                    style="margin-left: 10px; border-radius: 0px; border-color: #ffffff;">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" style="margin-left: 48%;" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" style="color: #02c33c;" href="/generate"><strong>Generate</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/usermanual">User Manual</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/aboutus">About Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-5">
+                <div>
+                    <div class="justify-content-left align-items-left">
+                        <p class="text-lg fs-1" style="color: #12691f;">
+                            <strong>Accurate, Fast & Sensitive</strong><br>
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    {% if buttonClicked %}
+                    <div class="container disable">
+                        <h2>Image Editor</h2>
+                        <p>Use this editor only if you need to edit the skin image before uploading.</p>
+                        <input type="checkbox" id="toggleCheckbox"> Use Editor
+                        <div id="editcontent" style="display: none;">
+                            <div class="wrapper">
+                                <div class="editor-panel">
+                                    <div class="filter">
+                                        <label class="title">Filters</label>
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <div class="options">
+                                                    <button id="brightness" class="active">Brightness</button>
+                                                    <button id="saturation">Saturation</button>
+                                                    <button id="inversion">Inversion</button>
+                                                    <button id="grayscale">Grayscale</button>
+                                                </div>
+                                                <div class="slider">
+                                                    <div class="filter-info">
+                                                        <p class="name">Brightness</p>
+                                                        <p class="value">100%</p>
+                                                    </div>
+                                                    <input type="range" value="100" min="0" max="200">
+                                                </div>
+                                                <div class="rotate">
+                                                    <label class="title">Rotate & Flip</label>
+                                                    <div class="options">
+                                                        <button id="left"><i
+                                                                class="fa-solid fa-rotate-left"></i></button>
+                                                        <button id="right"><i
+                                                                class="fa-solid fa-rotate-right"></i></button>
+                                                        <button id="horizontal"><i
+                                                                class='bx bx-reflect-vertical'></i></button>
+                                                        <button id="vertical"><i
+                                                                class='bx bx-reflect-horizontal'></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <div class="preview-img">
+                                                    <img src="\static\image-placeholder.png" alt="preview-img">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="controls">
+                                <div class="row">
+                                    <input type="file" class="file-input" accept="image/*" hidden>
+                                    <button class="choose-img"
+                                        style="margin-left: 10px; border: #00815c solid 1px; width: auto; height:40px; color: #ffffff; background-color: #007a53; border-radius: 5px;">Choose
+                                        Image</button>
+                                    <button class="save-img"
+                                        style="margin-left: 10px; border: #00815c solid 1px; width: auto; height:40px; color: #ffffff; background-color: #007a53; border-radius: 5px;">Save
+                                        Image</button>
+                                    <button class="reset-filter"
+                                        style="margin-left: 10px; border: #00815c solid 1px; width: auto; height:40px; color: #ffffff; background-color: #007a53; border-radius: 5px;">Reset
+                                        Filters</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</br></br>
+                    <form action="http://127.0.0.1:5000/result" method="POST" enctype="multipart/form-data">
+                        <div class="mb-2">
+                            <h2>Select Edited Skin Image</h2>
+                            <div id="image-cropper1">
+                                <input class="form-control" type="file"
+                                    style="font-weight: bold; color: #fff; border: #007a53 solid 2px; background-color: #007a53;"
+                                    name="file" id="formFile">
+                                <p>Click the 'Predict' button below after selecting the input image.</p>
+                            </div>
+                            <br>
+                        </div>
+                        <h2>Choose the AI Model</h2>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <input type="radio" id="cnn" name="model" value="cnn" checked>
+                                <label for="cnn">CNN Model (Xception)</label><br>
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="radio" id="vit" name="model" value="vit">
+                                <label for="vit">VIT Model (SM-VIT)</label><br>
+                            </div>
+                        </div>
+                        <br><br>
+                        <div class="d-flex justify-content-left align-items-left">
+                            <button type="submit" id="predict-btn" onclick="startLoading()"
+                                class="btn btn-outline-success" style="width: 160px; height: 40px; display: block;">
+                                <p class="fs-6">
+                                    Predict
+                                </p>
+                            </button>
+                            <br>
+                            <div class="loading-bar-container" id="loader1" style="display: none">
+                                <div class="loading-bar"></div>
+                                <h6 id="loading" style="color: #12691f; ">Please wait, prediction generating...</h6>
+                            </div>
+                            {% else %}
+                            {% endif %}
+                        </div>
+                    </form>
+                    <br>
+                    <div id="loading" style="color: #12691f; font-weight: bold"></div>
+                </div>
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4" style="background-color: rgb(255, 255, 255);">
+                <img class="logo" src="\static\bg1.png" style="width: 100%; height: 100%; max-height: 500px;">
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+    </div>
 	<script src="{{ url_for('static', filename='edit.js') }}"></script>
 	<script>
 
@@ -553,7 +466,9 @@
 
 
 	</script>
-
+	
 </body>
+
+
 
 </html>
