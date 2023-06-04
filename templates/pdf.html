@@ -217,16 +217,31 @@
       </div>
       <div class="row">
         <div class="col-sm-2"></div>
-        <div class="col-sm-8" style="text-align: right;">
+        <div class="col-sm-4" style="text-align: right;"></div>
+        <div class="col-sm-2" style="text-align: right;">
           </br>
           <button class="btn btn-outline-success" id="printBtn"
-            style=" text-align: center; width: 180px; height: 50px; " onclick="generatePDF()">
+            style=" text-align: center; width: 180px; height: 40px; " onclick="generatePDF()">
             <p class="fs-6">
               Download PDF
             </p>
-          </button>
-          <div class="col-sm-2"></div>
+          </button>        
         </div>
+
+        <div class="col-sm-2" style="text-align: right;">
+          <form action="http://127.0.0.1:5000/generate" method="POST" enctype="multipart/form-data">
+          </br>
+            <input type="hidden" id="url" name="url" value="{{imgurl}}">
+            <button type="submit" class="btn btn-outline-success" style="width: 160px; height: 40px;">
+              <p class="fs-6">
+                Back
+              </p>
+            </button>
+
+          </form>
+        </div>
+          <div class="col-sm-2"></div>
+        
       </div>
     </div>
     <div class="col-sm-1"></div>
