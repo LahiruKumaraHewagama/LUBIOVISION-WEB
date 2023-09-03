@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,14 +30,38 @@
 		section {
 			display: block;
 		}
+
 		.custom-list {
 			list-style-type: none;
 			padding-top: -10px;
 		}
+
 		.custom-list li {
 			margin: 0px -10px 0px 0px;
 		}
+
+
+		@media (min-width: 500px) {
+			.report-title {
+				display: none;
+				margin-left: 0;
+			}
+		}
+
+		.print-area {
+			display: block;
+
+		}
+
+		@media (max-width: 600px) {
+			.print-area  {
+				display: none;
+
+			}
+		}
+
 		@media print {
+
 			/* Sets print view with media query */
 			/* body * {
 				display: none;
@@ -46,10 +71,12 @@
 			.print-area * {
 				display: block;
 			}
+
 			/* Sets print area element and all its content to display */
 		}
 	</style>
 </head>
+
 <body>
 	<div>
 		<div>
@@ -83,291 +110,292 @@
 
 
 
-    <div class="container">
+	<div class="container">
 
-        <div class="mt-2">
-            <div class="row">
-                <div class="col-sm">
-                    <div>
-                    </br>
-                    <h1>Model Prediction</h1>
-                    <ul>
-                        <li>
-                            <h5 style="color: #0d5317;">Predicted skin cancer type is <strong
-                                    style="font-size: larger;">{{ ss }}</strong></strong></h5>
-                        </li>
-                        <div>
-                            <li>
-                                <h5 style="color: #12691f; font-weight: 30px ;">Prediction Accuracy: {{accuracy}}</h5>
-                            </li>
-                        </div>
-                    </ul>
-                    <div class="text-left">
-                        <p>( For given skin image, Grad CAM and Grad CAM++ heatmap explainabilities are shown in
-                            the right side.)</p>
-                        </br>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <form action="http://127.0.0.1:5000/generate" method="POST" enctype="multipart/form-data">
-                        <div class="d-flex justify-content-left align-items-left">
-                            <input type="hidden" id="url" name="url" value="{{image}}">
-                            <button type="submit" class="btn btn-outline-success" style="width: 160px; height: 40px;">
-                                <p class="fs-6">
-                                    Clear
-                                </p>
-                            </button>
-                        </div>
-                    </form>
-                    </br></br>
-                </div>
-                </div>
-                <div class="col-sm", style="background-color: rgb(255, 255, 255);">
-                    <div style="padding-right: 0px; background-color: rgb(160, 255, 208); width: 200px; height: 10px;">
-                    </div>
-                    <h2>Explainability Heatmaps</h2>
-                    </br>
-                    <div class="row" style="background-color: rgb(255, 255, 255);">
-                        <!-- <div class="col-sm-1"></div> -->
-                        <div class="col-sm">
-                            <div class="row">
-                                <label for="model" style=" color: #12691f; font-weight: bold;">IMAGE </label>
-                            <img class="logo" src="{{image}}" style="width:160px; height: 150px;">
-                            </div>
-                        </div>
-                        <div class="col-sm">
-                            <div class="row">
-                                <label for="model" style="color: #12691f; font-weight: bold;">Grad
-                                    CAM++</label>
-                                <img class="logo" src="\static\uploaded\{{name}}_gradcam++.jpg"
-                                    style="width: 160px; height: 150px;">
-                            </div>
-                            
-                        </div>
-                        <div class="col-sm">
-                            <div class="row">
-                                <label for="model" style="color: #12691f; font-weight: bold;">Grad
-                                    CAM</label>
-                                <img class="logo" src="\static\uploaded\{{name}}_gradcam.jpg"
-                                    style="width: 160px; height: 150px;">
-                            </div>
-                        </div>
-                    </div>
-                    </br>
-                    <p style="text-align:justify; "> The colour range of the heatmap can be described such that the colour
-                        dark blue indicates regions that contribute
-                        less to classification, whereas dark red indicates regions that contribute more. </p>
-                </div>
-            </div>
-    
-            <div class="row">
-    
-                <div class="col-sm">
-                    <div style="padding-right: 0px; background-color: rgb(160, 255, 208); width: 100%; height: 3px;"></div>
-                    </br>
-                    <h2>Medical Report Generation</h2>
-                </div>		
-            </div>
-    
-            <div class="row">
-                <div class="col-sm">
-                    <form id="contact-form" class="col-sm-10 col-md-offset-1 scrollimation fade-left d3">
-                        </br>
-                        <div class="form-group">
-                            <label class="control-label" for="contact-name" style="font-weight: bold;">Patient Name</label>
-                            <div class="controls">
-                                <input id="contact-name" name="contactName" placeholder="name*"
-                                    class="form-control requiredField" data-new-placeholder="Your name" type="text"
-                                    data-error-empty="Please enter  name">
-                                <i class="fa fa-user"></i>
-                            </div>
-                        </div><!-- End name input -->
-                        </br>
-                        <div class="form-group">
-                            <label class="control-label" for="contact-message" style="font-weight: bold;">Your comment about
-                                the Prediction</label>
-                            <div class="controls">
-                                <textarea id="contact-message" name="comments" placeholder="Your message*"
-                                    class="form-control requiredField" data-new-placeholder="Your message" rows="4"
-                                    data-error-empty="Please enter your message"></textarea>
-                                <i class="fa fa-comment"></i>
-                            </div>
-                        </div><!-- End textarea -->
-                    </form><!-- End contact-form -->
-                    </br>
-                    <label class="control-label" for="contact-message" style="font-weight: bold;">Result approval</label>
-                    <div class="row">
-                        <div class="col-sm-5">
-                            <input type="radio" id="Approve" name="model" value="Approve" checked>
-                            <label for="Approve">Approve</label><br>
-                        </div>
-                        <div class="col-sm-5">
-                            <input type="radio" id="Reject" name="model" value="Reject">
-                            <label for="Reject">Reject</label><br>
-                        </div>
-                    </div>
-                    </br>
-                    <div style="padding-right: 0px; background-color: rgb(160, 255, 208); width: 80%; height: 3px;">
-                    </div>
-                    </br>
-                    <button class="btn btn-outline-success" id="generatepdf" onclick="changeCont()"
-                        style="padding-top: 12px; width: 180px; height: 50px;">
-                        <p class="fs-6">
-                            Generate Report
-                        </p>
-                    </button>
-                    </br></br>
-                    
-                    <form action="http://127.0.0.1:5000/pdf" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" id="imgurl" name="imgurl" value="{{image}}">
-                        <input name="patientName" id="patientName"hidden/>  
-                        <input name="uuid" id="uuid" value="{{id}}" hidden/> 
-                        <input name="val" id="val"value="{{ss}}" hidden/> 
-                        <input name="acc" id="acc"value="{{accuracy}}" hidden/>
-                        <input name="date" id="date"value="{{date}}" hidden/> 
-                        <input name="approval" id="approval" hidden/>  
-                        <input name="feedback" id="feedback" hidden/>  
-                        <input name="imgname" id="imgname"value="{{name}}"  hidden>  
-                        <!-- <input name="imgurl" id="imgurl"value="{{image}}" hidden>   -->
-                        <button class="btn btn-outline-success" id="printBtn" 
-                        style="padding-top: 12px; width: 180px; height: 50px; display: none;">
-                        <p class="fs-6">
-                            Print PDF
-                        </p>
-                    </button>
-                      </form>
-                       
-                </div>
-                <div class="col-sm" id="report" style="border:1px solid black; ">
-                    <div class="print-area">
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-10">
-                            <div class="row" style="background-color: #00776d;">
-                                <div class="col-sm-4">
-                                    <img class="logo" src="\static\logo.jpeg" style="  width: 180px; height: 70px;">
-                                </div>
-                                <div class="col-sm-8">
-                                    </br>
-                                    <h5 style="color: #bbfff9; font-weight: bold; ">Melanoma Skin Cancer Report </h5>
-                                </div>
-                            </div>
-                            </br>
-                            <div class="row">
-                                <div
-                                    style="padding-right: 0px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
-                                </div>
-                                <div class="col-sm-8">
-                                    <p
-                                        style="font-size: 16px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color: #0d5317; font-weight: bold;">
-                                        Details</p>
-                                    <p style=" font-size: 12px; margin-top: -10px;"><strong>Report ID : </strong> {{id}}
-                                    </p>
-                                    <p style=" font-size: 12px; margin-top: -15px;" id="p_name"><strong>Patient Name :
-                                        </strong> </p>
-                                    <p style=" font-size: 12px; margin-top: -15px;"><strong>Date : </strong> {{date}}
-                                    </p>
-                                </div>
-                                <div class="col-sm-1">
-                                    <div
-                                        style="margin-top: 5px; padding-right: 0px; background-color:rgb(204, 204, 204); width: 1px; height:100%;">
-                                    </div>
-                                </div>
-                                <div class="col-sm-2">
-                                    <img class="logo" id="approve_logo" src="static\approved.jpg"
-                                        style="width: 100px; height: 100px; display: block;">
-                                    <img class="logo" id="reject_logo" src="static\rejected.jpg"
-                                        style="width: 100px; height: 100px; display: none;">
-                                </div>
-                            </div>
-                            <div
-                                style="padding-right: 0px; background-color: rgb(204, 204, 204); width: 100%; height: 1px;">
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-8">
-                                    <p
-                                        style="font-size: 16px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color: #0d5317; font-weight: bold;">
-                                        Model Prediction</p>
-                                    <p style=" font-size: 12px; margin-top: -10px;"><strong>Predicted skin cancer type
-                                            is</strong>
-                                        {{ ss }}</p>
-                                    <p style=" font-size: 12px ; margin-top: -15px;"><strong>Prediction
-                                            Accuracy:</strong>
-                                        {{accuracy}}</p>
-                                </div>
-                            </div>
-                            <div
-                                style="padding-right: 0px; background-color:rgb(204, 204, 204);width: 100%; height: 1px;">
-                            </div>
-                            <div class="row">
-                                <p
-                                    style="font-size: 16px;color: #0d5317;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; ">
-                                    Explainability Heatmaps</p>
-                                <div class="col-sm-4">
-                                    <p style="font-size: 14px;color: #000000;">Input Image</p>
-                                    <img class="logo" src="{{image}}"
-                                        style="width:100px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; height: 90px;">
-                                </div>
-                                <div class="col-sm-4">
-                                    <p style="font-size: 14px;color: #000000; ">Grad CAM++</p>
-                                    <img class="logo" src="\static\uploaded\{{name}}_gradcam++.jpg"
-                                        style="width: 100px; height: 90px;">
-                                </div>
-                                <div class="col-sm-4">
-                                    <p style="font-size: 14px;color: #000000; ">Grad CAM</p>
-                                    <img class="logo" src="\static\uploaded\{{name}}_gradcam.jpg"
-                                        style="width: 100px; height: 90px;">
-                                </div>
-                            </div>
-                            </br>
-                            <div
-                                style="padding-right: 0px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <p
-                                        style="font-size: 16px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: #0d5317; font-weight: bold;">
-                                        Dermatologist Feedback </p>
-                                    <div>
-                                        <p style="font-size: 13px; word-break:break-all; " id="p_comment"></p>
-                                    </div>
-                                </div>
-                            </div>
-                            </br>
-                            <div
-                                style="padding-right: 0px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
-                            </div>
-                            <p style="font-size: 10px;">The automated skin cancer prediction should be understood to be
-                                subject to errors and inaccuracies for which the LUBIOVISON team disclaims all
-                                liability.
-                                All risks associated with using the system are assumed by the user.
-                            </p>
-                            <div style="padding-right: 0px; background-color: #00776d; width: 100%; height:40px;">
-                            </div>
-                        </div>
-                        <div class="col-sm-1"></div>
-                    </div>
-                
-                </div>
-            </div>
-            </div>
-        </div>
-    </div>
-<br>
-    <footer id="main-footer" class="border-top-color2">
-        <div class="container">
-          </br>
-          <p style="font-size: xx-small;">Copyright &copy; 2023 - LU bio Vision - All Rights Reserved</p>
-        </div>
-      </footer>
+		<div class="mt-2">
+			<div class="row">
+				<div class="col-sm">
+					<div>
+						</br>
+						<h1>Model Prediction</h1>
+						<ul>
+							<li class="canser-type2">
+								<h5 style="color: #0d5317;">Predicted skin cancer type : <strong>{{ ss
+										}}</strong></strong></h5>
+							</li>
 
+							<div>
+								<li>
+									<h5 style="color: #12691f; font-weight: 30px ;">Prediction Accuracy: {{accuracy}}
+									</h5>
+								</li>
+							</div>
+						</ul>
+						<div class="text-left">
+							<p>( For given skin image, Grad CAM and Grad CAM++ heatmap explainabilities are shown in
+								the right side.)</p>
+							</br>
+						</div>
+					</div>
+					<div class="mt-3">
+						<form action="http://127.0.0.1:5000/generate" method="POST" enctype="multipart/form-data">
+							<div class="d-flex justify-content-left align-items-left">
+								<input type="hidden" id="url" name="url" value="{{image}}">
+								<button type="submit" class="btn btn-outline-success"
+									style="width: 160px; height: 40px;">
+									<p class="fs-6">
+										Clear
+									</p>
+								</button>
+							</div>
+						</form>
+						</br></br>
+					</div>
+				</div>
+				<div class="col-sm" , style="background-color: rgb(255, 255, 255);">
+					<div style="padding-right: 0px; background-color: rgb(160, 255, 208); width: 200px; height: 10px;">
+					</div>
+					<h2>Explainability Heatmaps</h2>
+					</br>
+					<div class="row" style="background-color: rgb(255, 255, 255);">
 
+						<p style="font-size: 12px;color: #000000;margin-bottom: 0px; font-weight: bold; ">
+							Input Image &emsp;&emsp;&emsp;&emsp; Grad CAM++ &emsp;&emsp; &emsp; Grad CAM</p>
+						</br></br>
+						<!-- <p style="font-size: 14px;color: #000000;">Input Image</p> -->
+						<!-- <div class="col-xs-12 col-sm-4"> -->
+						<!-- <p style="font-size: 14px;color: #000000;">Input Image</p> -->
+						<img class="logo img-fluid" src="{{image}}"
+							style="margin-top: -10px; width:110px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; height: 90px;">
+						<!-- </div> -->
+						<!-- <div class=" col-xs-12 col-sm-4"> -->
+						<!-- <p style="font-size: 14px;color: #000000; ">Grad CAM++</p> -->
+						<img class="logo img-fluid" src="\static\uploaded\{{name}}_gradcam++.jpg"
+							style="margin-top: -10px;  width: 110px; height: 90px;">
+						<!-- </div> -->
+						<!-- <div class="col-xs-12 col-sm-4"> -->
+						<!-- <p style="font-size: 14px;color: #000000; ">Grad CAM</p> -->
+						<img class="logo img-fluid" src="\static\uploaded\{{name}}_gradcam.jpg"
+							style="margin-top: -10px;  width: 110px; height: 90px;">
+						<!-- </div>  -->
+						</br>
+					</div>
+					</br>
+					<p style="text-align:justify; "> The colour range of the heatmap can be described such that the
+						colour
+						dark blue indicates regions that contribute
+						less to classification, whereas dark red indicates regions that contribute more. </p>
+				</div>
+			</div>
 
+			<div class="row">
 
-    <!-- GGGGG -->
+				<div class="col-sm">
+					<div style="padding-right: 0px; background-color: rgb(160, 255, 208); width: 100%; height: 3px;">
+					</div>
+					</br>
+					<h2>Medical Report Generation</h2>
+				</div>
+			</div>
 
+			<div class="row">
+				<div class="col-sm">
+					<form id="contact-form" class="col-sm-10 col-md-offset-1 scrollimation fade-left d3">
+						</br>
+						<div class="form-group">
+							<label class="control-label" for="contact-name" style="font-weight: bold;">Patient
+								Name</label>
+							<div class="controls">
+								<input id="contact-name" name="contactName" placeholder="name*"
+									class="form-control requiredField" data-new-placeholder="Your name" type="text"
+									data-error-empty="Please enter  name">
+								<i class="fa fa-user"></i>
+							</div>
+						</div><!-- End name input -->
+						</br>
+						<div class="form-group">
+							<label class="control-label" for="contact-message" style="font-weight: bold;">Your comment
+								about
+								the Prediction</label>
+							<div class="controls">
+								<textarea id="contact-message" name="comments" placeholder="Your message*"
+									class="form-control requiredField" data-new-placeholder="Your message" rows="4"
+									data-error-empty="Please enter your message"></textarea>
+								<i class="fa fa-comment"></i>
+							</div>
+						</div><!-- End textarea -->
+					</form><!-- End contact-form -->
+					</br>
+					<label class="control-label" for="contact-message" style="font-weight: bold;">Result
+						approval</label>
+					<div class="row">
+						<div class="col-sm-5">
+							<input type="radio" id="Approve" name="model" value="Approve" checked>
+							<label for="Approve">Approve</label><br>
+						</div>
+						<div class="col-sm-5">
+							<input type="radio" id="Reject" name="model" value="Reject">
+							<label for="Reject">Reject</label><br>
+						</div>
+					</div>
+					</br>
+					<div style="padding-right: 0px; background-color: rgb(160, 255, 208); width: 80%; height: 3px;">
+					</div>
+					</br>
+					<button class="btn btn-outline-success" id="generatepdf" onclick="changeCont()"
+						style="padding-top: 12px; width: 180px; height: 50px;">
+						<p class="fs-6">
+							Generate Report
+						</p>
+					</button>
+					</br></br>
 
-	
+					<form action="http://127.0.0.1:5000/pdf" method="POST" enctype="multipart/form-data">
+						<input type="hidden" id="imgurl" name="imgurl" value="{{image}}">
+						<input name="patientName" id="patientName" hidden />
+						<input name="uuid" id="uuid" value="{{id}}" hidden />
+						<input name="val" id="val" value="{{ss}}" hidden />
+						<input name="acc" id="acc" value="{{accuracy}}" hidden />
+						<input name="date" id="date" value="{{date}}" hidden />
+						<input name="approval" id="approval" hidden />
+						<input name="feedback" id="feedback" hidden />
+						<input name="imgname" id="imgname" value="{{name}}" hidden>
+						<!-- <input name="imgurl" id="imgurl"value="{{image}}" hidden>   -->
+						<button class="btn btn-outline-success" id="printBtn"
+							style="padding-top: 12px; width: 180px; height: 50px; display: none;">
+							<p class="fs-6">
+								Print PDF
+							</p>
+						</button>
+					</form>
+					</br>
+
+				</div>
+				<div class="col-sm" id="report" style="border:1px solid black; ">
+					<div class="print-area">
+						<div class="row">
+							<div class="col-sm-1"></div>
+							<div class="col-sm-10">
+								<div class="row">
+									<div class="col-sm-12">
+										<img class="logo" src="\static\reporttitle.jpg" style="  width: 100%">
+									</div>
+
+								</div>
+								</br>
+								<div class="row">
+
+									<div
+										style="padding-right: 0px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
+									</div>
+									<div class="col-sm-8">
+										<p
+											style="font-size: 16px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color: #0d5317; font-weight: bold;">
+											Details</p>
+										<p style=" font-size: 12px; margin-top: -10px;"><strong>Report ID : </strong>
+											{{id}}
+										</p>
+										<p style=" font-size: 12px; margin-top: -15px;" id="p_name"><strong>Patient Name
+												:
+											</strong> </p>
+										<p style=" font-size: 12px; margin-top: -15px;"><strong>Date : </strong>
+											{{date}}
+										</p>
+									</div>
+									<div class="col-sm-1">
+										<div
+											style="margin-top: 5px; padding-right: 0px; background-color:rgb(204, 204, 204); width: 1px; height:100%;">
+										</div>
+									</div>
+									<div class="col-sm-2  approval_logo">
+										<div class="approval_logo">
+											<img id="approve_logo" src="static\approved.jpg"
+												style="width: 100px; height: 100px; display: block; ">
+											<img id="reject_logo" src="static\rejected.jpg"
+												style="width: 100px; height: 100px; display: none;">
+
+										</div>
+
+									</div>
+								</div>
+								<div
+									style="padding-right: 0px; background-color: rgb(204, 204, 204); width: 100%; height: 1px;">
+								</div>
+								<div class="row">
+									<div class="col-sm-8">
+										<p
+											style="font-size: 16px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color: #0d5317; font-weight: bold;">
+											Model Prediction</p>
+										<p style=" font-size: 12px; margin-top: -10px;"><strong>Predicted skin cancer
+												type
+												is</strong>
+											{{ ss }}</p>
+										<p style=" font-size: 12px ; margin-top: -15px;"><strong>Prediction
+												Accuracy:</strong>
+											{{accuracy}}</p>
+									</div>
+								</div>
+								<div
+									style="padding-right: 0px; background-color:rgb(204, 204, 204);width: 100%; height: 1px;">
+								</div>
+								<div class="row">
+									<p
+										style="font-size: 16px;color: #0d5317;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; ">
+										Explainability Heatmaps</p>
+									<div class="col-sm-4">
+										<p style="font-size: 14px;color: #000000;">Input Image</p>
+										<img class="logo" src="{{image}}"
+											style="width:100px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; height: 90px;">
+									</div>
+									<div class="col-sm-4">
+										<p style="font-size: 14px;color: #000000; ">Grad CAM++</p>
+										<img class="logo" src="\static\uploaded\{{name}}_gradcam++.jpg"
+											style="width: 100px; height: 90px;">
+									</div>
+									<div class="col-sm-4">
+										<p style="font-size: 14px;color: #000000; ">Grad CAM</p>
+										<img class="logo" src="\static\uploaded\{{name}}_gradcam.jpg"
+											style="width: 100px; height: 90px;">
+									</div>
+								</div>
+								</br>
+								<div
+									style="padding-right: 0px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
+								</div>
+								<div class="row">
+									<div class="col-sm-12">
+										<p
+											style="font-size: 16px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: #0d5317; font-weight: bold;">
+											Dermatologist Feedback </p>
+										<div>
+											<p style="font-size: 13px; word-break:break-all; " id="p_comment"></p>
+										</div>
+									</div>
+								</div>
+								</br>
+								<div
+									style="padding-right: 0px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
+								</div>
+								<p style="font-size: 10px;">The automated skin cancer prediction should be understood to
+									be
+									subject to errors and inaccuracies for which the LUBIOVISON team disclaims all
+									liability.
+									All risks associated with using the system are assumed by the user.
+								</p>
+								<div style="padding-right: 0px; background-color: #00776d; width: 100%; height:40px;">
+								</div>
+							</div>
+							<div class="col-sm-1"></div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+
+	<!-- GGGGG -->
 	<!-- </div>
 	</div> -->
 	<!-- <script type="text/javascript">
@@ -385,21 +413,25 @@
 			document.getElementById("p_comment").innerHTML = document.getElementById("contact-message").value
 			document.getElementById("printBtn").style.display = 'block';
 			// var status=document.getElementsByName("model").value
-			if (document.getElementById("Reject").checked) {
+			if (document.getElementById("Reject").checked && document.getElementById("approve_logo").style.display == 'block') {
+
+
+
 				document.getElementById("approve_logo").style.display = 'none';
 				document.getElementById("reject_logo").style.display = 'block';
 			}
-			else {
+			else{
 				document.getElementById("approve_logo").style.display = 'block';
 				document.getElementById("reject_logo").style.display = 'none';
 			}
-			document.getElementById("patientName").value =document.getElementById("contact-name").value;
-		
-			document.getElementById("approval").value =document.getElementById("Approve").checked;
-			document.getElementById("feedback").value =document.getElementById("contact-message").value;
+			document.getElementById("patientName").value = document.getElementById("contact-name").value;
+
+			document.getElementById("approval").value = document.getElementById("Approve").checked;
+			document.getElementById("feedback").value = document.getElementById("contact-message").value;
 			// document.getElementById("imgname").value =name;
 			// document.getElementById("imgurl").value =image;
 		}
 	</script>
 </body>
+
 </html>

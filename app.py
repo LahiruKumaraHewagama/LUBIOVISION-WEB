@@ -50,7 +50,6 @@ def home():
 @app.route('/pdf',methods = ['POST'])
 def pdf():
 	# return render_template('edit.html')
-
 # document.getElementById("patientName").value =document.getElementById("contact-name").value;
 # 			document.getElementById("uuid").value =id;
 # 			document.getElementById("date").value =date;

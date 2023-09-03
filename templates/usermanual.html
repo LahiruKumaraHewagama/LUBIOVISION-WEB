@@ -13,6 +13,39 @@
     <title>LUBioVision</title>
 </head>
 
+
+<style> 
+        .border-bottom-color2 {
+            border-bottom: 7px solid#12691f;
+        }
+
+        .border-top-color2 {
+            border-top: 2px solid #12691f;
+            ;
+        }
+        
+.container .gif img  {
+      display: block;
+      margin-left: 10px;  
+       width: 100%; 
+       height: 100%; 
+      border:2px solid #12691f;
+    }
+
+@media (max-width: 600px) {
+  .container .gif img {
+    display: block;
+    margin-top: 6px;
+    margin-left: 0px;  
+       width: 100%; 
+       height: 100%; 
+      border:2px solid #12691f;
+}
+    }
+
+</style>
+
+
 <body>
     <div>
       <div>
@@ -42,15 +75,12 @@
         </nav>
       </div>
 
-
-
-
 <div class="container">
 
     <div style="padding: 10px;">
         <div class="row">
             <p class="text-lg fs-1" style="color: #12691f;">
-                </br>
+          
                 <strong>How To Use ?</strong></br>
             </p>
             <p style="font-size: large;">This application is designed to melanoma skin cancer image with explainable
@@ -67,8 +97,10 @@
                 ( File formats: .jpeg .jpg, .png )
             </div>
             <div class="col-sm">
+              <div class="gif">
                 <img class="logo" src="\static\step1.gif"
-                style="margin-left: 10px;    width: 100%; height: 100%;   border:2px solid #12691f;">
+               >
+              </div>               
             </div>
         </div>
          </br>
@@ -83,8 +115,10 @@
                         <strong>VIT Model : Vision Transfomer (Salient Mask-Guided Vision Transformer)</strong>
             </div>
             <div class="col-sm">
+              <div class="gif">
                 <img class="logo" src="\static\step1.gif"
-                style="margin-left: 10px;   width: 100%; height: 100%;   border:2px solid #12691f;">
+               >
+              </div>    
             </div>
         </div>
     </br>
@@ -97,8 +131,10 @@
                         </br>
         </div>
         <div class="col-sm">
+          <div class="gif">
             <img class="logo" src="\static\step1.gif"
-            style="margin-left: 10px;   width: 100%; height: 100%;   border:2px solid #12691f;">
+           >
+          </div>    
         </div>
     </div>
     </br>
@@ -109,8 +145,10 @@
         </br></br>
     </div>
     <div class="col-sm">
+      <div class="gif">
         <img class="logo" src="\static\step1.gif"
-                            style="margin-left: 10px;    width: 100%; height: 100%;   border:2px solid #12691f;">
+       >
+      </div>    
     </div>
     </div>
     <br>
@@ -132,6 +170,15 @@
 
 
     </div>
+
+  </br></br>
+  <footer id="main-footer" class="border-top-color2">
+      <div style="text-align: center;">
+          </br>
+          <p style="font-size: xx-small;">Copyright &copy; 2023 - LU bio Vision - All Rights Reserved
+          </p>
+      </div>
+  </footer>
 </body>
 
 </html>

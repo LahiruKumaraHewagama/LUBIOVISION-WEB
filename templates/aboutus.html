@@ -12,6 +12,8 @@
     crossorigin="anonymous"></script>
   <title>LUBioVision</title>
   <style>
+
+
     body {
       font-size: 16px;
       color: #000000;
@@ -294,6 +296,33 @@
     #main-footer p {
       text-align: center;
     }
+
+    .container .title h1  {
+      display: block;
+    
+    }
+
+@media (max-width: 600px) {
+  .container .title h1 {
+    display: none;
+  
+}
+    }
+
+
+    .container .alone img  {
+      display: block;
+      margin-top: 1px; width: 250px; height: 260px;
+    
+    }
+
+@media (max-width: 600px) {
+  .container .alone img {
+    display: none;
+  
+}
+    }
+
   </style>
 </head>
 
@@ -330,7 +359,10 @@
     <div class="row">
       <div style="text-align: center; color: #12691f; font-size: x-large; font-weight: bold;">
         <h1 style="font-size: 50px;"><strong><strong> WELCOME</strong> </strong></h1>
-        <h1 style="font-size: 60px;"><strong>LU BIO VISION</strong></h1>
+        <div class="title">
+          <h1 ><strong>LU BIO VISION</strong></h1>
+        </div>
+
       </div>
     </div>
     <br>
@@ -342,7 +374,7 @@
           to evaluate and produce explainability heatmaps that has been approved by dermatologists and oncologists.
           You can examine your skin with
           LU Bio Vision and receive the answers you need seconds.
-          </br>
+          </br> </br>
           We are a research group from the Department of Computer Science and Engineering, University of Moratuwa.
           Our passion lies in the field of medical diagnostics, particularly in the accurate, fast, and effective
           identification of melanoma skin
@@ -350,7 +382,10 @@
         </p>
       </div>
       <div class="col-sm-2">
-        <img class="logo" src="static\logo icon.jpg" style="margin-top: 1px; width: 250px; height: 260px;">
+        <div class="alone">
+          <img class="logo" src="static\logo icon.jpg" >
+        </div>
+
       </div>
     </div>
 

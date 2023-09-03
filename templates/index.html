@@ -13,74 +13,79 @@
     <title>LUBioVision</title>
 
     <style>
-  .border-bottom-color2{
-    border-bottom:7px solid#12691f;
-}
+        .border-bottom-color2 {
+            border-bottom: 7px solid#12691f;
+        }
 
-.border-top-color2{
-    border-top:2px solid #12691f;;
-}
+        .border-top-color2 {
+            border-top: 2px solid #12691f;
+            ;
+        }
+        
+        .container .gif img {
+        display: block;
+        width: 160%; 
+        height: auto;    
 
-</style>
+        }
+
+        @media (max-width: 600px) {
+        .container .gif img {
+            display: none;
+       
+
+        }
+        }
+
+        .container .gif0 img {
+        display: none;      
+
+        }
+
+        @media (max-width: 600px) {
+        .container .gif0 img {
+            display: block;
+            width: 100%; 
+            height: auto;
+            margin-left: -40px
+
+        }
+        }
+
+    </style>
 </head>
 
 
 
 <body>
+
     <div>
-        <!-- <div class="mt-4 container-fluid">
-            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
-                <img class="logo" src="\static\logo.jpeg" style="margin-left: 110px; width: 180px; height: 70px;">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
-                    style="margin-left: 10px; border-radius: 0px; border-color: #ffffff;">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link" style="color: #02c33c;" href="/"><strong>Home</strong></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/generate">Generate</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/usermanual">User Manual</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/aboutus">About Us</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div> -->
-        <div>
-      <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
-        <img class="logo" src="\static\logo.jpeg" style="margin-left: 110px;  width: 180px; height: 70px;">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
-          style=" margin-left: 10px; border-radius: 0px; border-color: #ffffff;">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" style="margin-left: 48%;" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" style="color: #02c33c;" href="/"><strong>Home</strong></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/generate">Generate</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/usermanual">User Manual</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/aboutus">About Us</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
+            <img class="logo" src="\static\logo.jpeg" style="margin-left: 110px;  width: 180px; height: 70px;">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
+                style=" margin-left: 10px; border-radius: 0px; border-color: #ffffff;">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" style="margin-left: 48%;" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" style="color: #02c33c;" href="/"><strong>Home</strong></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/generate">Generate</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/usermanual">User Manual</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/aboutus">About Us</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
-    </div>
+
     <div class="mt-2">
         <div class="container">
             <div class="row">
@@ -92,9 +97,13 @@
                                 Identification with Explainability
                             </p>
                         </div>
+
+                        <div class="gif0">
+                            <img class="logo" src="\static\automated-melanoma-detection.gif">
+                        </div>
                         <div class="text-left">
-                            <p class=""><strong>Looking for a quicker, more accurate method to identify Melanoma skin
-                                    cancer?</strong> Look no further than LU Bio Vision,
+                            <p style="font-size:18px"><p style="font-size:20px"><strong>Looking for a quicker, more accurate method to identify Melanoma skin
+                                    cancer ?</strong> </p>No further than LU Bio Vision,
                                 the framework used to inspecting your skin and produce explainability heatmaps that has
                                 been approved by dermatologists and oncologists.
                                 You can examine your skin with LU Bio Vision and receive the answers you need seconds.
@@ -107,11 +116,15 @@
                                 <button type="submit" class="btn btn-outline-success"
                                     style="width: 160px; height: 50px;">Get Started</button>
                             </form>
+                        </br>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4" style="background-color: rgb(255, 255, 255);">
-                    <img class="logo" src="\static\automated-melanoma-detection.gif" style="width: 100%; height: auto;">
+                    <div class="gif">
+                        <img class="logo" src="\static\automated-melanoma-detection.gif">
+                    </div>
+                   
                 </div>
             </div>
         </div>
@@ -123,8 +136,8 @@
                     Skin cancer is one of the most common cancers in the world and melanoma causes the highest number of
                     deaths annually.
                     Melanoma is the most hazardous type of skin cancer, that develops fast and spreads to other organs.
-                    <strong>World Health Organization (WHO) </strong>
-                    has predicted nearly 7,650 melanoma deaths in 2023, with an anticipated 99,780 new cases in the USA
+                    World Health Organization (WHO)
+                    has predicted nearly  <strong> 7,650 melanoma deaths in 2023, with an anticipated 99,780 new cases </strong>  in the USA
                     . In order to avoid adverse results from the advent,
                     prompt detection and treatment are required. It is primarily recognized and distinguished by
                     expensive and difficult malignant skin development.
@@ -140,20 +153,7 @@
                     However, the black-box nature of the decision-making process of the algorithm challenges the
                     trustworthiness of the model. This can be addressed by explainable
                     artificial intelligence (XAI), which is an evolving area of research.
-                    </br> </br>
-                    This application presents a computational model for melanoma identification by using a deep learning
-                    model with transfer learning together with XAI.
-                    The Xception model which can provide high accuracy with a small number of epochs , is used as the
-                    classification model. We use melanoma and nevus(Non-melanoma)
-                    images from the HAM10000 dataset , which contains dermoscopic and clinical images. The main focus of
-                    this study is to achieve high-performance metrics,
-                    highlight the explainability of the classification model and increase the trustworthiness of the
-                    model. As a novel contribution, we generate a heatmap using
-                    both Gradient-weighted Class Activation Mapping (Grad-CAM) and Grad-CAM++ , U2-Net Model for
-                    generation skin cancer image segmentation and
-                    train SM-ViT (Saliency Mask Guided Vision Transformer) model for Melanoma detection. The proposed
-                    approach can assist
-                    dermatologists as a support model for identifying melanoma.
+                   
                 </p>
                 </br>
                 <div class="row">
@@ -179,6 +179,10 @@
                             and GradCAM++ heat maps. (The more general version of Grad-CAM technique, which is known as
                             the Grad-CAM++.
                             )
+                        </br> </br>
+                        So, this application presents a computational model for melanoma identification by using a deep learning
+                        model with transfer learning together with XAI.The proposed approach can assist
+                        dermatologists as a support model for identifying melanoma.
                         </p>
                     </div>
                 </div>
@@ -267,7 +271,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
     </br></br>

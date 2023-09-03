@@ -44,6 +44,18 @@
 
     }
 
+    .print-area .approval_logo img {
+      display: block;
+
+    }
+
+    @media (max-width: 600px) {
+      .print-area .approval_logo img {
+        display: none;
+
+      }
+    }
+
 
     @media print {
 
@@ -72,7 +84,7 @@
     <div class="col-sm-1"></div>
 
     <div class="col-sm-10">
-      <div class="print-area" id="report">
+      <div class="print-area" id="report" style="margin: 10px;">
         <div class="row">
           <div class="col-sm-2">
           </div>
@@ -80,21 +92,13 @@
 
           <div class="col-sm-8">
             </br>
-            <div class="row" style="background-color: #00776d;">
-
-              <div class="col-sm-4">
-                <img class="logo" src="\static\logo.jpeg" style="  width: 180px; height: 70px;">
-              </div>
-
-              <div class="col-sm-8">
-                </br>
-                <h5 style="color: #bbfff9; font-weight: bold; ">Melanoma Skin Cancer Report </h5>
-              </div>
-
+            <div class="col-sm-12">
+              <img class="logo" src="\static\reporttitle.jpg" style="  width: 100%; height: 80px;">
             </div>
+
             </br>
             <div class="row">
-              <div style="padding-right: 0px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
+              <div style="padding-right: 2px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
               </div>
 
 
@@ -121,8 +125,11 @@
                   style="margin-top: 5px; padding-right: 0px; background-color:rgb(204, 204, 204); width: 1px; height:100%;">
                 </div>
               </div>
-              <div class="col-sm-2">
-                <img class="logo" id="approval_logo" src="" style="width: 100px; height: 100px; display: block">
+              <div class="col-sm-2 approval_logo">
+
+                <div class="approval_logo">
+                  <img id="approval_logo" src="" style="width: 100px; height: 100px;">
+                </div>
 
 
               </div>
@@ -157,32 +164,42 @@
             <div style="padding-right: 0px; background-color:rgb(204, 204, 204);width: 100%; height: 1px;">
             </div>
 
-            <div class="row">
+            <div class="row" style="display: inline-block;">
               <p
                 style="font-size: 16px;color: #0d5317;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-bottom: 0px;  ">
                 Explainability Heatmaps</p>
-              <div class="col-sm-4">
-                <p style="font-size: 14px;color: #000000;">Input Image</p>
-                <img class="logo" src="{{imgurl}}"
-                  style="margin-top: -10px; width:100px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; height: 90px;">
-              </div>
-              <div class="col-sm-4">
-                <p style="font-size: 14px;color: #000000; ">Grad CAM++</p>
-                <img class="logo" src="\static\uploaded\{{imgname}}_gradcam++.jpg"
-                  style="margin-top: -10px;  width: 100px; height: 90px;">
-              </div>
-              <div class="col-sm-4">
-                <p style="font-size: 14px;color: #000000; ">Grad CAM</p>
-                <img class="logo" src="\static\uploaded\{{imgname}}_gradcam.jpg"
-                  style="margin-top: -10px;  width: 100px; height: 90px;">
-              </div>
-            </div>
+
+           
+            <p
+            style="font-size: 12px;color: #000000;margin-bottom: 0px;  ">
+            Input Image &emsp;&emsp;&emsp;&emsp; Grad CAM++ &emsp;&emsp; &emsp;  Grad CAM</p>
+          </br>
+            <!-- <p style="font-size: 14px;color: #000000;">Input Image</p> -->
+          <!-- <div class="col-xs-12 col-sm-4"> -->
+                <!-- <p style="font-size: 14px;color: #000000;">Input Image</p> -->
+                <img class="logo img-fluid" src="{{imgurl}}"
+                  style="margin-top: -10px; width:110px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; height: 90px;">
+              <!-- </div> -->
+              <!-- <div class=" col-xs-12 col-sm-4"> -->
+                <!-- <p style="font-size: 14px;color: #000000; ">Grad CAM++</p> -->
+                <img class="logo img-fluid" src="\static\uploaded\{{imgname}}_gradcam++.jpg"
+                  style="margin-top: -10px;  width: 110px; height: 90px;">
+              <!-- </div> -->
+              <!-- <div class="col-xs-12 col-sm-4"> -->
+                <!-- <p style="font-size: 14px;color: #000000; ">Grad CAM</p> -->
+                <img class="logo img-fluid" src="\static\uploaded\{{imgname}}_gradcam.jpg"
+                  style="margin-top: -10px;  width: 110px; height: 90px;">
+              <!-- </div>  -->
             </br>
-            <div style="padding-right: 0px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
+
+            </div>
+    
+            <div style="margin-top: 5px; padding-right: 0px; background-color:rgb(204, 204, 204); width: 100%; height: 1px;">
             </div>
 
 
             <div class="row">
+            </br>
               <div class="col-sm-12">
                 <p
                   style="font-size: 16px; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: #0d5317; font-weight: bold;margin-bottom: 0px; ">
@@ -215,24 +232,23 @@
           <div class="col-sm-2"></div>
         </div>
       </div>
-      <div class="row">
+      <div class="row" style="margin: 10px;">
         <div class="col-sm-2"></div>
         <div class="col-sm-4" style="text-align: right;"></div>
         <div class="col-sm-2" style="text-align: right;">
           </br>
           <button class="btn btn-outline-success" id="printBtn"
-            style=" text-align: center; width: 180px; height: 40px; " onclick="generatePDF()">
+            style=" text-align: center; width: 100%; height: 50%; padding: 2px;" onclick="generatePDF()">
             <p class="fs-6">
-              Download PDF
-            </p>
-          </button>        
+              Download </p>
+          </button>
         </div>
 
         <div class="col-sm-2" style="text-align: right;">
           <form action="http://127.0.0.1:5000/generate" method="POST" enctype="multipart/form-data">
-          </br>
+            </br>
             <input type="hidden" id="url" name="url" value="{{imgurl}}">
-            <button type="submit" class="btn btn-outline-success" style="width: 160px; height: 40px;">
+            <button type="submit" class="btn btn-outline-success" style="text-align: center;height: 40px;">
               <p class="fs-6">
                 Back
               </p>
@@ -240,8 +256,8 @@
 
           </form>
         </div>
-          <div class="col-sm-2"></div>
-        
+        <div class="col-sm-2"></div>
+
       </div>
     </div>
     <div class="col-sm-1"></div>
