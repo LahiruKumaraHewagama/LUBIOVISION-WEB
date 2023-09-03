@@ -3,7 +3,7 @@ keras==2.10.0
 numpy
 uuid
 datetime
-cv2==4.6.0
+opencv-python==4.6.0
 torch==1.11.0
 pytorch-gradcam==0.2.1
 shutil
