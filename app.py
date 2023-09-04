@@ -36,11 +36,11 @@ try:
 except:
 	pass
 
-model = tf.keras.models.load_model('models\\Xception.h5')
-vit_model = torch.load('models\SMVIT.pt',map_location=torch.device('cpu'))
+model = tf.keras.models.load_model('models/Xception.h5')
+vit_model = torch.load('models/SMVIT.pt',map_location=torch.device('cpu'))
 app = Flask(__name__)
 
-app.config['UPLOAD_FOLDER'] = 'static\\uploaded'
+app.config['UPLOAD_FOLDER'] = 'static/uploaded'
 
 @app.route('/',methods = ['GET'])
 def home():
